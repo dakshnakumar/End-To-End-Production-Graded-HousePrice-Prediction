@@ -38,5 +38,3 @@ if __name__ == "__main__":
     print(creditcard.checkout(100))
     print(paypal.checkout(200))
     print(bitcoin.checkout(400))
-    
-
