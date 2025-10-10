@@ -6,17 +6,17 @@ class DataInspectionStatergy(ABC):
     def inspect(self, data: pd.DataFrame) :
         pass
 
-class DataTypeInscpectionStatergy(DataInspectionStatergy):
+class DataTypeInspectionStrategy(DataInspectionStatergy):
     def inspect(self, df: pd.DataFrame) :
         print("\n Data Types and Non-Null Counts:")
         print(df.info())
 
-class SummaryStatisticsInspectionStartergy(DataInspectionStatergy):
+class SummaryStatisticsInspectionStrategy(DataInspectionStatergy):
     def inspect(self,df:pd.DataFrame):
         print("\n Summary Statistics:")
         print(df.describe())
         print("\nSummary Statistics (Categorical Features):")
-        print(df.describe(include=[0]))
+        # print(df.describe(include=['O']))
 
 
 class DataInspector():

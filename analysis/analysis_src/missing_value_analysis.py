@@ -16,7 +16,7 @@ class MissingValues(ABC):
     def visualize_missing_values(self, df: pd.DataFrame):
         pass
 
-class SimpleMissingValues(MissingValues):
+class SimpleMissingValuesAnalysis(MissingValues):
     def identify_missing_values(self, df: pd.DataFrame):
         print("Missing values per column:")
         print(df.isnull().sum())

@@ -15,7 +15,7 @@ class BivariateAnalysisStrategy(ABC):
 
 # Concrete strategies for different types of bivariate analysis
 # Strategy for numerical vs numerical analysis
-class NumbericalVsNumericalStrategy(BivariateAnalysisStrategy):
+class NumericalVsNumericalStrategy(BivariateAnalysisStrategy):
     def analyze(self,df:pd.DataFrame, x:str, y:str):
         plt.figure(figsize=(10,6))
         sns.scatterplot(data=df,x=x,y=y)
@@ -25,7 +25,7 @@ class NumbericalVsNumericalStrategy(BivariateAnalysisStrategy):
         plt.show()
 
 # Strategy for categorical vs categorical analysis
-class CategoricalVsNumericalStategy(BivariateAnalysisStrategy):
+class CategoricalVsNumericalStrategy(BivariateAnalysisStrategy):
     def analyze(self,df:pd.DataFrame, x:str, y:str):
         plt.figure(figsize=(10,6))
         sns.boxplot(data=df,x=x,y=y)
@@ -36,8 +36,8 @@ class CategoricalVsNumericalStategy(BivariateAnalysisStrategy):
 
 # context class to switch between different strategies
 class BivariateAnalyzer():
-    def __init__(self,_statergy:BivariateAnalysisStrategy):
-        self._statergy = _statergy
+    def __init__(self,statergy:BivariateAnalysisStrategy):
+        self._statergy = statergy
     
     def set_strategy(self, strategy:BivariateAnalysisStrategy):
         self._statergy = strategy
@@ -51,6 +51,3 @@ if __name__ == "__main__":
 
 
     
-
-
-
