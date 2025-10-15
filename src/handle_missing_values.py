@@ -30,7 +30,7 @@ class FillMissingValuesStrategy(MissingValueHandlingStrategy):
         self.method = method
         self.fill_value = fill_value
 
-    def handle(self, df, column):
+    def handle(self, df: pd.DataFrame) -> pd.DataFrame:
         logging.info(f"Filling missing values using method: {self.method}")
 
         df_cleaned = df.copy()

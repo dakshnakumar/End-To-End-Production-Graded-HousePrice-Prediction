@@ -28,7 +28,7 @@ class SimpleTrainTestSplitStrategy(DataSplittingStrategy):
         logging.info("Train-test split completed.")
         return X_train, X_test, y_train, y_test
     
-class Datasplitter(DataSplittingStrategy):
+class Datasplitter():
     def __init__(self,strategy:DataSplittingStrategy):
         self.strategy = strategy
 

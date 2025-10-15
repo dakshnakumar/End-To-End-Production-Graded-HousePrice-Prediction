@@ -18,6 +18,8 @@ class LogTransformation(FeatureEngineeringStrategy):
                 self.features = features
 
         def apply_transformation(self, df: pd.DataFrame) -> pd.DataFrame:
+                if not self.features:
+                       raise ValueError("Features cannot be empty; you must provide at least one feature.")
                 logging.info(f"Applying log transformation to features: {self.features}")
                 df_transformed = df.copy()
                 for feature in self.features:
@@ -34,6 +36,8 @@ class StandardScaling(FeatureEngineeringStrategy):
     
         
        def apply_transformation(self, df:pd.DataFrame)-> pd.DataFrame:
+              if not self.features:
+                     raise ValueError("Features cannot be empty; you must provide at least one feature.")
               logging.info(f"Applying standard scaler transformation to features: {self.features}")
               df_transformed = df.copy()
               df_transformed[self.features] = self.scaler.fit_transform(df[self.features])
@@ -46,6 +50,8 @@ class MinMaxScaling(FeatureEngineeringStrategy):
             self.scaler = MinMaxScaler(feature_range=feature_range)
 
        def apply_transformation(self, df:pd.DataFrame)-> pd.DataFrame:
+              if not self.features:
+                     raise ValueError("Features cannot be empty; you must provide at least one feature.")
               logging.info(
             f"Applying Min-Max scaling to features: {self.features} with range {self.scaler.feature_range}"
               )
@@ -60,6 +66,8 @@ class OneHotEncoding(FeatureEngineeringStrategy):
               self.encoder = OneHotEncoder(sparse=False,drop="first")
 
        def apply_transformation(self, df:pd.DataFrame)-> pd.DataFrame:
+            if not self.features:
+                   raise ValueError("Features cannot be empty; you must provide at least one feature.")
             logging.info(
             f"Applying OneHot encoding to features: {self.features}"
             )

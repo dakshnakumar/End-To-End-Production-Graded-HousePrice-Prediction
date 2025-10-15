@@ -20,7 +20,8 @@ class ZScoreOutlierDetection(OutlierDetection):
 
     def detect_outlier(self, df:pd.DataFrame) -> pd.DataFrame:
         logging.info("Detecting outliers using the Z-score method.")
-        z_scores = np.abs((df.mean()/df.std()))
+        #z_scores = np.abs((df.mean()/df.std()))
+        z_scores = np.abs((df - df.mean()) / df.std())
         outliers = z_scores > self.threshold
         logging.info(f"Outliers detected with Z-score threshold: {self.threshold}.")
         return outliers
@@ -28,10 +29,14 @@ class ZScoreOutlierDetection(OutlierDetection):
 class IQROutlierDetection(OutlierDetection):
     def detect_outlier(self,df:pd.DataFrame) -> pd.DataFrame:
         logging.info("Detecting outliers using the IQR method.")
-        Q1 = np.quantile(0.25)
-        Q3 = np.quantile(0.75)
-        IQR = Q3-Q1
-        outliers = (df < (Q1 - 1.5 * IQR) | df > (Q3 + 1.5 * IQR))
+        # Q1 = np.quantile(0.25)
+        # Q3 = np.quantile(0.75)
+        # IQR = Q3-Q1
+        # outliers = (df < (Q1 - 1.5 * IQR) | df > (Q3 + 1.5 * IQR))
+        Q1 = df.quantile(0.25)
+        Q3 = df.quantile(0.75)
+        IQR = Q3 - Q1
+        outliers = (df < (Q1 - 1.5 * IQR)) | (df > (Q3 + 1.5 * IQR))
         logging.info("Outliers detected using the IQR method.")
         return outliers
     
@@ -43,14 +48,14 @@ class OutlierDetector:
         logging.info(f"Switching outlier detection strategy.")
         self.strategy = strategy
 
-    def detect_outlier(self, df:pd.DataFrame) -> pd.DataFrame :
+    def detect_outliers(self, df:pd.DataFrame) -> pd.DataFrame :
         logging.info("Executing outlier detection")
         return self.strategy.detect_outlier(df)
     
     def handle_outliers(self,df:pd.DataFrame,method="remove")-> pd.DataFrame:
-        outlier = self.detect_outlier(df)
+        outlier = self.detect_outliers(df)
         if method == "remove":
-          logging.info("Removing Outliers from Dataset")
+          logging.info("Removing Outliers from Dataset") 
           df_cleaned = df[(~ outlier).all(axis=1)]
         elif method == "cap":
            logging.info("Capping outliers from the dataset") 
@@ -69,6 +74,21 @@ class OutlierDetector:
             plt.show()
         logging.info("Outlier visualization completed.")
 
+if __name__ == "__main__":
+    # # Example dataframe
+    df = pd.read_csv("C:\AIML_Projects\End-To-End-Production-Graded-HousePrice-Prediction\extracted_data\AmesHousing.csv")
+    df_numeric = df.select_dtypes(include=[np.number]).dropna()
+
+    # # Initialize the OutlierDetector with the Z-Score based Outlier Detection Strategy
+    outlier_detector = OutlierDetector(ZScoreOutlierDetection(threshold=3))
+
+    # # Detect and handle outliers
+    outliers = outlier_detector.detect_outlier(df_numeric)
+    df_cleaned = outlier_detector.handle_outliers(df_numeric, method="remove")
+
+    print(df_cleaned.shape)
+    # Visualize outliers in specific features
+    outlier_detector.visualize_outlier(df_cleaned, features=["SalePrice", "Gr Liv Area"])
 
 
         
